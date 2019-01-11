@@ -1,0 +1,128 @@
+.css_mod__bike {
+    display: flex;
+    flex-wrap: wrap;
+
+    @media (min-width: 750px) {
+        order: 3;
+        width: 504px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: space-between;
+        margin-top: 52px;
+    }
+
+    @media (min-width: 970px) {
+        width: 970px;
+        margin-top: 222px;
+    }
+}
+
+.bike__item {
+    z-index: 2;
+    position: relative;
+    width: 320px;
+    background-color: #362f2d;
+    display: flex;
+    margin-bottom: 10px;
+
+    @media (min-width: 480px) {
+        width: 380px;
+        margin-bottom: 10px;
+    }
+
+    @media (min-width: 750px) {
+        width: 242px;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
+
+    @media (min-width: 970px) {
+        width: 240px;
+    }
+}
+
+.bike__item img {
+    display: block;
+    width: 120px;
+    height: 70px;
+
+    @media (min-width: 750px) {
+        width: 242px;
+        height: 140px;
+        object-fit: cover;
+    }
+
+    @media (min-width: 970px) {
+        width: 240px;
+        height: 180px;
+    }
+}
+
+.bike__item a {
+    width: 140px;
+    margin-left: 20px;
+    align-self: center;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 400;
+
+    &:focus,
+    &:hover,
+    &:active {
+        color: #a57d2c;
+    }
+
+    @media (min-width: 750px) {
+        width: 242px;
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 16px;
+        margin-left: 0;
+    }
+}
+
+.bike__help-me {
+    z-index: 2;
+    position: relative;
+    width: 320px;
+    background-color: #d84315;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: 22px;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 0 #b73811;
+    transition: 0.3s linear;
+
+    &:focus,
+    &:hover,
+    &:active {
+        background-color: #f34c19;
+    }
+
+    @media (min-width: 480px) {
+        width: 380px;
+        padding-left: 50px;
+        padding-right: 50px;
+        margin-bottom: 22px;
+    }
+
+    @media (min-width: 750px) {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 35px;
+        margin-bottom: 52px;
+    }
+
+    @media (min-width: 970px) {
+        margin-top: 30px;
+        padding-top: 10px;
+    }
+}
