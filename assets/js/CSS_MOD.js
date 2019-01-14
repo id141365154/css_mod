@@ -1,28 +1,47 @@
 var css = new CSS_MOD;
 css.init({
 	blockClassPrefix:"css_mod__",
-	url: '/CSS_MOD.php'
+	url: '/CSS_MOD.php',
+	onCssSet: function(){
+		console.log('oncssset method');
+	},
+	onInit: function(){
+		console.log('oninit');
+	}
 });
 
 function CSS_MOD(){
+
+
+	//Publick methods
 	var _CSS_MOD = this;
+	
 	_CSS_MOD.options = {};
 
-	this.init = function(opts){
+	_CSS_MOD.init = function(opts){
 
 		var defaults = {
 			blockClassPrefix:"css_mod__",
-			url: '/CSS_MOD.php'
+			url: '/CSS_MOD.php',
+			// Callbacks
+			onInit : function(){},
+			onCssSet : function(){}
 		}
 
-		_CSS_MOD.options = _CSS_MOD.merge_obj(defaults, opts);
-
+		_CSS_MOD.options = merge_obj(defaults, opts);
 		document.addEventListener('DOMContentLoaded', function(){
-			_CSS_MOD.cacheCheck();
+			cacheCheck();
 		});
+		_CSS_MOD.options.onInit(_CSS_MOD);
 	}
 
-	this.makeRequest = function (cb){
+	_CSS_MOD.update = function(){
+		cacheCheck();
+	}
+
+
+	//Private methods
+	makeRequest = function (cb){
 		var blocks = document.querySelectorAll("[class*='"+_CSS_MOD.options.blockClassPrefix+"']");
 		var blocksArrayClass = [];
 
@@ -52,7 +71,7 @@ function CSS_MOD(){
 		xhr.send(json);
 	}
 
-	this.cacheCheck = function(){
+	cacheCheck = function(){
 
 		if (localStorageTest()) {
 
@@ -60,28 +79,28 @@ function CSS_MOD(){
 
 			if (localStorage[currentPath + "common_css_sum"] == '' || localStorage[currentPath + "common_css_sum"] == undefined
 				|| localStorage[currentPath + "blocks_css_sum"] == '' || localStorage[currentPath + "blocks_css_sum"] == undefined) {
-				_CSS_MOD.makeRequest(function(data){
+					makeRequest(function(data){
 					updateLocalStorage(data);
-					_CSS_MOD.setCss(data.common_css + data.blocks_css);
+					setCss(data.common_css + data.blocks_css);
 				});
 			}else{
-				_CSS_MOD.setCss(localStorage[currentPath + "common_css"] + localStorage[currentPath + "blocks_css"]);
+				setCss(localStorage[currentPath + "common_css"] + localStorage[currentPath + "blocks_css"]);
 
-				_CSS_MOD.makeRequest(function(data){
+				makeRequest(function(data){
 					if (localStorage[currentPath + "common_css_sum"] !== data.common_css_sum
 						|| localStorage[currentPath + "blocks_css_sum"] !== data.blocks_css_sum) {
 
 						updateLocalStorage(data);
 						console.log('updated to last css ver');
-						_CSS_MOD.setCss(data.common_css + data.blocks_css);
+						setCss(data.common_css + data.blocks_css);
 					}
 				});
 			}
 
 
 		}else{
-			_CSS_MOD.makeRequest(function(data){
-				_CSS_MOD.setCss(data.common_css + data.blocks_css);
+			makeRequest(function(data){
+				setCss(data.common_css + data.blocks_css);
 			});
 		}
 
@@ -105,15 +124,15 @@ function CSS_MOD(){
 		}
 	}
 
-	this.setCss = function(css){
+	setCss = function(css){
 				var head = document.head || document.getElementsByTagName('head')[0]
 				var style = '';
-				if (_CSS_MOD.setCss.styleTag == "") {
+				if (setCss.styleTag == "") {
 					style = document.createElement('style');
-					_CSS_MOD.setCss.styleTag = style;
+					setCss.styleTag = style;
 				}else{
-					style = _CSS_MOD.setCss.styleTag;
-					_CSS_MOD.setCss.firstInit = false;
+					style = setCss.styleTag;
+					setCss.firstInit = false;
 				}
 				style.type = 'text/css';
 				if (style.styleSheet){
@@ -122,14 +141,16 @@ function CSS_MOD(){
 					style.innerHTML = "";
 					style.appendChild(document.createTextNode(css));
 				}
-				if (_CSS_MOD.setCss.firstInit) {
+				if (setCss.firstInit) {
 					head.appendChild(style);
 				};
-	}
-	this.setCss.firstInit = true;
-	this.setCss.styleTag = "";
 
-	this.merge_obj = function (obj1,obj2){
+				_CSS_MOD.options.onCssSet(CSS_MOD);
+	}
+	setCss.firstInit = true;
+	setCss.styleTag = "";
+
+	merge_obj = function (obj1,obj2){
 		var obj3 = {};
 		for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
 		for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
